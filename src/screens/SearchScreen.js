@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 
 const XML_URL = 'https://kkns.eu/inet.xml';
-const db = SQLite.openDatabase('DbZpevnikator');
+const db = SQLite.openDatabase('DbZpevnikator4');
 const parseString = require('react-native-xml2js').parseString;
 
 export default class SearchScreen extends React.Component {
@@ -30,36 +30,6 @@ export default class SearchScreen extends React.Component {
 
     componentDidMount() {
         if (this.state.dbExists) this.updateSongList();
-    }
-
-    /**
-     * Get songs from database to state
-     * @param search search string
-     */
-    updateSongList = (search) => {
-
-        search = '*' + search + '*'
-
-        let songList = [];
-
-        db.transaction(tx => {
-            /*tx.executeSql('SELECT * FROM zpevnikator WHERE LOWER(group_name) LIKE ? OR LOWER(title) LIKE ? OR LOWER(text) LIKE ? LIMIT 99', 
-            [search?`%${search}%`:`%`, search?`%${search}%`:`%`, search?`%${search}%`:`%`], */
-            tx.executeSql('SELECT groupname,title,text,snippet(zpevnikator, "<b>", "</b>","...", -1, 10) AS snippet FROM zpevnikator WHERE groupname MATCH ? OR title MATCH ? OR text MATCH ? LIMIT 99',
-                [search, search, search],
-                (tx, results) => {
-                    for (i = 0; i < results.rows.length; ++i) {
-                        songList.push({
-                            id: i.toString(),
-                            groupname: results.rows.item(i).groupname,
-                            title: results.rows.item(i).title,
-                            text: results.rows.item(i).text,
-                            snippet: results.rows.item(i).snippet
-                        })
-                    }
-                    this.setState({ songList: songList });
-                });
-        });
     }
 
     existsDb = () => {
@@ -93,7 +63,7 @@ export default class SearchScreen extends React.Component {
 
     createDb = () => {
         db.transaction(tx => {
-            tx.executeSql('CREATE VIRTUAL TABLE IF NOT EXISTS zpevnikator USING fts4(id INTEGER PRIMARY KEY AUTOINCREMENT, groupname TEXT, title TEXT, text TEXT, tokenize=unicode61);', [], (tx, results) => {
+            tx.executeSql('CREATE VIRTUAL TABLE IF NOT EXISTS zpevnikator USING fts4(id INTEGER PRIMARY KEY AUTOINCREMENT, groupname TEXT, title TEXT, text TEXT, textclean TEXT, tokenize=unicode61);', [], (tx, results) => {
                 //tx.executeSql('CREATE TABLE IF NOT EXISTS zpevnikator (id INTEGER PRIMARY KEY AUTOINCREMENT, group_name TEXT, title TEXT, text TEXT);', [], (tx, results) => {
             }, (tx, error) => {
                 this.setState({ appState: error });
@@ -113,8 +83,9 @@ export default class SearchScreen extends React.Component {
                 let groupname = song[i].groupname.toString().replace(/\"/g, '&quot;').replace(/\"/g, '&quot;');
                 let title = song[i].title.toString().replace(/\"/g, '&quot;');
                 let text = song[i].songtext.toString().replace(/\"/g, '&quot;');
+                let textclean = text.replace(/\[(.{1,7}?)\]/g, '');
 
-                tx.executeSql('INSERT INTO zpevnikator (groupname, title, text) VALUES (?,?,?)', [groupname, title, text],
+                tx.executeSql('INSERT INTO zpevnikator (groupname, title, text, textclean) VALUES (?,?,?,?)', [groupname, title, text, textclean],
                     null, error => {
                         this.setState({ appState: error });
                     });
@@ -123,6 +94,36 @@ export default class SearchScreen extends React.Component {
             this.setState({ appState: error });
         }, () => {
             this.setState({ appState: null });
+        });
+    }
+
+    /**
+     * Get songs from database to state
+     * @param search search string
+     */
+    updateSongList = (search) => {
+
+        search = '*' + search + '*'
+
+        let songList = [];
+
+        db.transaction(tx => {
+            /*tx.executeSql('SELECT * FROM zpevnikator WHERE LOWER(group_name) LIKE ? OR LOWER(title) LIKE ? OR LOWER(text) LIKE ? LIMIT 99', 
+            [search?`%${search}%`:`%`, search?`%${search}%`:`%`, search?`%${search}%`:`%`], */
+            tx.executeSql('SELECT groupname,title,text,snippet(zpevnikator, "<b>", "</b>","...", 4, 10) AS snippet FROM zpevnikator WHERE zpevnikator MATCH ? LIMIT 42',
+                [search],
+                (tx, results) => {
+                    for (i = 0; i < results.rows.length; ++i) {
+                        songList.push({
+                            id: i.toString(),
+                            groupname: results.rows.item(i).groupname,
+                            title: results.rows.item(i).title,
+                            text: results.rows.item(i).text,
+                            snippet: results.rows.item(i).snippet
+                        })
+                    }
+                    this.setState({ songList: songList });
+                });
         });
     }
 
