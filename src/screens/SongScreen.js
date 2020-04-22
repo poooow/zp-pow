@@ -59,7 +59,7 @@ export default class SongScreen extends React.Component {
             .replace(/\[(.{1,7}?)\]/g, '<span class="chord">$1</span>')
             .replace(/(?:\r\n|\r|\n)/g, '\n')
             .replace(/<\/span>\\W*<span>/g, '&nbsp;')
-            .replace(/(\.|=)(R[0-9]{0,2}|Ref|\*|[0-9]{1,2})(\.:|\.|:)/g, '<span class="verseNumber">$2</span>');
+            .replace(/(\.|=)(R[0-9]{0,2}|Ref|Rf|\*|[0-9]{1,2})(\.:|\.|:)/g, '<span class="verseNumber">$2</span>');
 
         params.html = '<meta name="viewport" content="width=device-width, initial-scale=1">'
             + styleHTML + '<div class="container">' + params.html + '</div>';
