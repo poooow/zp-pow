@@ -26,7 +26,8 @@ export default StyleSheet.create({
   },
   appState: {
     alignSelf: 'center',
-    fontSize: 17,
+    fontSize: 30,
+    fontWeight: 'bold'
   },
   loadDb: {
     alignSelf: 'center',

@@ -45,7 +45,7 @@ export default class SearchScreen extends React.Component {
             }, () => {
                 this.setState({
                     dbExists: false,
-                    appState: 'Zpěvník je prázdny'
+                    appState: 'Zpěvník je prázdný'
                 });
                 return false;
             });
@@ -58,7 +58,7 @@ export default class SearchScreen extends React.Component {
         }, null, () => {
             this.setState({
                 dbExists: false,
-                appState: 'Zpěvník je prázdny'
+                appState: 'Zpěvník je prázdný'
             });
         });
     }
@@ -66,7 +66,6 @@ export default class SearchScreen extends React.Component {
     createDb = () => {
         db.transaction(tx => {
             tx.executeSql('CREATE VIRTUAL TABLE IF NOT EXISTS zpevnikator USING fts4(id INTEGER PRIMARY KEY AUTOINCREMENT, groupname TEXT, title TEXT, text TEXT, textclean TEXT, tokenize=unicode61);', [], (tx, results) => {
-                //tx.executeSql('CREATE TABLE IF NOT EXISTS zpevnikator (id INTEGER PRIMARY KEY AUTOINCREMENT, group_name TEXT, title TEXT, text TEXT);', [], (tx, results) => {
             }, (tx, error) => {
                 this.setState({ appState: error });
             });
@@ -110,8 +109,6 @@ export default class SearchScreen extends React.Component {
         let songList = [];
 
         db.transaction(tx => {
-            /*tx.executeSql('SELECT * FROM zpevnikator WHERE LOWER(group_name) LIKE ? OR LOWER(title) LIKE ? OR LOWER(text) LIKE ? LIMIT 99', 
-            [search?`%${search}%`:`%`, search?`%${search}%`:`%`, search?`%${search}%`:`%`], */
             tx.executeSql('SELECT groupname,title,text,snippet(zpevnikator, "<b>", "</b>","...", 4, 10) AS snippet FROM zpevnikator WHERE zpevnikator MATCH ? LIMIT 42',
                 [search],
                 (tx, results) => {
@@ -157,7 +154,7 @@ export default class SearchScreen extends React.Component {
         let json = this.parseXML(xml);
 
         if (json) {
-            this.setState({ appState: 'Ukládám zpěvník ...' });
+            this.setState({ appState: 'Zpracovávám zpěvník ...' });
             this.populateDb(json);
         } else {
             this.purgeDb();
@@ -181,8 +178,8 @@ export default class SearchScreen extends React.Component {
     renderLoadDbButton = () => {
         return (
             <TouchableOpacity onPress={this.loadDb}>
-                <Icon style={styles.iconDownload} name="download" size={100} color="#000000" />
-                <Text style={styles.loadDb}>Nahrát zpěvník z internetu (13 MB)</Text>
+                <Icon style={[styles.iconDownload, { color: this.state.darkMode ? '#fff' : '#000' }]} name="download" size={100} />
+                <Text style={[styles.loadDb, { color: this.state.darkMode ? '#fff' : '#000' }]}>Nahrát zpěvník z internetu (13 MB)</Text>
             </TouchableOpacity>
         );
     }
@@ -215,11 +212,11 @@ export default class SearchScreen extends React.Component {
             <View style={[styles.container, { backgroundColor: this.state.darkMode ? '#000' : '#fff' }]}>
                 <MenuProvider>
                     {/*<Button
-                    onPress={this.purgeDb}
-                    title="Smazat databázi"
-                    color="#841584"
-                />
-                <Button
+                        onPress={this.purgeDb}
+                        title="Smazat databázi"
+                        color="#841584"
+                    />
+                    <Button
                     onPress={this.existsDb}
                     title="exists databázi"
                     color="#841584"
@@ -229,7 +226,7 @@ export default class SearchScreen extends React.Component {
                             style={[styles.input, { color: this.state.darkMode ? '#fff' : '#000' }]}
                             onChangeText={text => this.updateSongList(text)}
                             placeholder="Hledat autora, písničku, nebo část textu"
-                            placeholderTextColor="#bbbbbb"
+                            placeholderTextColor="#99999955"
                         />
                         <Menu>
                             <MenuTrigger>
@@ -247,20 +244,27 @@ export default class SearchScreen extends React.Component {
 
                     {this.state.appState || !this.state.dbExists ?
                         <View style={styles.stateContainer}>
-                            {this.state.appState ? <Text style={styles.appState}>{this.state.appState}</Text> : null}
+                            {this.state.appState ? <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>{this.state.appState}</Text> : null}
                             {this.state.dbExists ? null : this.renderLoadDbButton()}
                         </View>
                         : null}
-                    <View>
-                        {this.state.dbExists ?
+                    {this.state.dbExists ?
+                        <View>
                             <FlatList
                                 keyboardShouldPersistTaps={'handled'}
                                 keyExtractor={(item) => item.id}
                                 data={this.state.songList}
                                 renderItem={this.renderItem}
                             />
-                            : null}
-                    </View>
+                        </View>
+                        : null}
+                    {this.state.appState == null && !this.state.songList.length ?
+                        <View style={styles.stateContainer}>
+                            <Icon style={[styles.iconSearch, { color: this.state.darkMode ? '#666' : '#ccc' }]} name="search" size={100} />
+                            <Text></Text>
+                            <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>Můžete začít hledat</Text>
+                        </View>
+                        : null}
                 </MenuProvider>
             </View>
         );
