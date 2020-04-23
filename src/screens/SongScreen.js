@@ -12,12 +12,21 @@ export default class SongScreen extends React.Component {
 
         const styleHTML = `<style type="text/css">
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+        html, body {
+            padding: 0;
+            margin: 0;
+        }
+        
+        body {
+            display: flex;
+        }
 
         .container {
             font-family: 'Roboto Mono', monospace;
             font-size: 90%;
-            margin-top: 1em;
             line-height: 2.5em;
+            padding: 1rem;
+            flex-grow: 1;
         }
 
         .row {
@@ -38,7 +47,7 @@ export default class SongScreen extends React.Component {
 
         .verseNumber {
             font-weight: 700;
-            background-color: white;
+            background-color: #ffffff;
             padding-right: 0.5em;
         }
 
@@ -52,7 +61,22 @@ export default class SongScreen extends React.Component {
             border-top: 1px solid #00000033;
             z-index: -1;
         }
+        </style>`;
 
+        const styleHTMLDark = `<style type="text/css">
+        .container {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .chord {          
+            color: #000000;
+            background-color: #ffffff88;
+        }
+
+        .verseNumber {
+            background-color: #000000;
+        }
         </style>`;
 
         params.html = params.text.replace(/(.+)/g, '<div class="row">$1</div>')
@@ -62,21 +86,18 @@ export default class SongScreen extends React.Component {
             .replace(/(\.|=)(R[0-9]{0,2}|Ref|Rf|\*|[0-9]{1,2})(\.:|\.|:)/g, '<span class="verseNumber">$2</span>');
 
         params.html = '<meta name="viewport" content="width=device-width, initial-scale=1">'
-            + styleHTML + '<div class="container">' + params.html + '</div>';
+            + styleHTML + (params.darkMode ? styleHTMLDark : '') + '<div class="container">' + params.html + '</div>';
 
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: params.darkMode ? '#000' : '#fff' }]}>
                 <View style={styles.songHeader}>
                     <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.goBack()}>
-                        <Icon name="angle-left" size={40} color="#000000" />
+                        <Icon name="angle-left" size={40} style={{ color: params.darkMode ? '#fff' : '#000' }} />
                     </TouchableOpacity>
                     <View style={styles.songHeaderTitle}>
-                        <Text style={styles.title}>{params.title}</Text>
-                        <Text style={styles.subtitle}>{params.groupname}</Text>
+                        <Text style={[styles.title, { color: params.darkMode ? '#fff' : '#000' }]}>{params.title}</Text>
+                        <Text style={[styles.subtitle, { color: params.darkMode ? '#fff' : '#000' }]}>{params.groupname}</Text>
                     </View>
-                    {/*<TouchableOpacity style={styles.icon}>
-                        <Icon name="ellipsis-v" size={20} color="#000000" />
-                    </TouchableOpacity>*/}
                 </View>
                 <WebView
                     originWhitelist={['*']}

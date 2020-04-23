@@ -1,9 +1,14 @@
 import { StyleSheet } from "react-native";
 import Constants from 'expo-constants';
 
+const textColor = '#555555';
+const textColorLight = '#cccccc';
+const backgroundColor = '#ffffff';
+
 export default StyleSheet.create({
   container: {
     flex: 1,
+    flexGrow: 1,
     marginTop: Constants.statusBarHeight,
     backgroundColor: '#ffffff',
   },
@@ -36,12 +41,13 @@ export default StyleSheet.create({
   input: {
     fontSize: 17,
     padding: 16,
-    marginHorizontal: 16,
+    marginLeft: 16,
     marginVertical: 16,
     height: 55,
     borderColor: "#888888",
     borderWidth: 1,
     borderRadius: 10,
+    flexGrow: 1,
   },
   icon: {
     justifyContent: "center",
@@ -57,11 +63,28 @@ export default StyleSheet.create({
   songHeader: {
     flexDirection: 'row',
   },
+  searchHeader: {
+    flexDirection: 'row',
+  },
   songHeaderTitle: {
     flexGrow: 1,
     paddingTop: 15,
   },
   songScrollView: {
     marginHorizontal: 10,
-  }
+  },
+  menuTrigger: {
+    padding: 20,
+    color: textColorLight,
+    fontSize: 30,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  menuItem: {
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    fontSize: 15,
+    color: textColor,
+  },
 });

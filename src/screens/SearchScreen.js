@@ -4,6 +4,7 @@ import * as SQLite from 'expo-sqlite';
 import styles from '../../styles.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
+import { MenuProvider, Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 
 const XML_URL = 'https://kkns.eu/inet.xml';
 const db = SQLite.openDatabase('DbZpevnikator4');
@@ -24,7 +25,8 @@ export default class SearchScreen extends React.Component {
         this.state = {
             dbExists: existsDb,
             songList: [],
-            appState: appState
+            appState: appState,
+            darkMode: false
         };
     }
 
@@ -167,6 +169,15 @@ export default class SearchScreen extends React.Component {
         this.updateSongList();
     }
 
+    toggleDarkMode = () => {
+
+        let newState = !this.state.darkMode;
+
+        this.setState({
+            darkMode: newState,
+        });
+    };
+
     renderLoadDbButton = () => {
         return (
             <TouchableOpacity onPress={this.loadDb}>
@@ -183,24 +194,27 @@ export default class SearchScreen extends React.Component {
                     groupname: item.groupname,
                     title: item.title,
                     text: item.text,
+                    darkMode: this.state.darkMode,
                 })}>
-                <View style={styles.item}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.subtitle}>{item.groupname}</Text>
+                <View style={[styles.item, { backgroundColor: this.state.darkMode ? '#000' : '#fff' }]}>
+                    <Text style={[styles.title, { color: this.state.darkMode ? '#fff' : '#000' }]}>{item.title}</Text>
+                    <Text style={[styles.subtitle, { color: this.state.darkMode ? '#fff' : '#000' }]}>{item.groupname}</Text>
                     <HTMLView
                         value={'<div>' + item.snippet.replace(/\n/g, "") + '</div>'}
                         stylesheet={stylesHTML}
                     />
                 </View>
             </TouchableOpacity>
-            
+
         );
     }
 
     render() {
+
         return (
-            <View style={styles.container}>
-                {/*<Button
+            <View style={[styles.container, { backgroundColor: this.state.darkMode ? '#000' : '#fff' }]}>
+                <MenuProvider>
+                    {/*<Button
                     onPress={this.purgeDb}
                     title="Smazat databázi"
                     color="#841584"
@@ -210,28 +224,44 @@ export default class SearchScreen extends React.Component {
                     title="exists databázi"
                     color="#841584"
                 />*/}
-                <TextInput
-                    style={styles.input}
-                    onChangeText={text => this.updateSongList(text)}
-                    placeholder="Hledat autora, písničku, nebo část textu"
-                    placeholderTextColor="#bbbbbb"
-                />
-                {this.state.appState || !this.state.dbExists ?
-                    <View style={styles.stateContainer}>
-                        {this.state.appState ? <Text style={styles.appState}>{this.state.appState}</Text> : null}
-                        {this.state.dbExists ? null : this.renderLoadDbButton()}
-                    </View>
-                    : null}
-                <View>
-                    {this.state.dbExists ?
-                        <FlatList
-                            keyboardShouldPersistTaps={'handled'}
-                            keyExtractor={(item) => item.id}
-                            data={this.state.songList}
-                            renderItem={this.renderItem}
+                    <View style={styles.searchHeader}>
+                        <TextInput
+                            style={[styles.input, { color: this.state.darkMode ? '#fff' : '#000' }]}
+                            onChangeText={text => this.updateSongList(text)}
+                            placeholder="Hledat autora, písničku, nebo část textu"
+                            placeholderTextColor="#bbbbbb"
                         />
+                        <Menu>
+                            <MenuTrigger>
+                                <Text
+                                    style={[styles.menuTrigger, { color: this.state.darkMode ? '#666' : '#ccc' }]}>&#x22EE;</Text>
+                            </MenuTrigger>
+                            <MenuOptions>
+                                <MenuOption onSelect={() => this.toggleDarkMode()}>
+                                    <Text style={styles.menuItem}>{this.state.darkMode ? 'Zrušit ' : ''}Noční režim</Text>
+                                </MenuOption>
+                            </MenuOptions>
+                        </Menu>
+
+                    </View>
+
+                    {this.state.appState || !this.state.dbExists ?
+                        <View style={styles.stateContainer}>
+                            {this.state.appState ? <Text style={styles.appState}>{this.state.appState}</Text> : null}
+                            {this.state.dbExists ? null : this.renderLoadDbButton()}
+                        </View>
                         : null}
-                </View>
+                    <View>
+                        {this.state.dbExists ?
+                            <FlatList
+                                keyboardShouldPersistTaps={'handled'}
+                                keyExtractor={(item) => item.id}
+                                data={this.state.songList}
+                                renderItem={this.renderItem}
+                            />
+                            : null}
+                    </View>
+                </MenuProvider>
             </View>
         );
     }
@@ -246,7 +276,7 @@ const stylesHTML = StyleSheet.create({
         color: '#888888'
     },
     b: {
-      backgroundColor: '#fffcb3',
-      borderRadius: 8,
+        backgroundColor: '#fffb1f44',
+        borderRadius: 8,
     },
-  });
+});
