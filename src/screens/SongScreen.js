@@ -79,11 +79,15 @@ export default class SongScreen extends React.Component {
         }
         </style>`;
 
-        params.html = params.text.replace(/(.+)/g, '<div class="row">$1</div>')
-            .replace(/\[(.{1,7}?)\]/g, '<span class="chord">$1</span>')
-            .replace(/(?:\r\n|\r|\n)/g, '\n')
-            .replace(/<\/span>\\W*<span>/g, '&nbsp;')
-            .replace(/(\.|=)(R[0-9]{0,2}|Ref|Rf|\*|[0-9]{1,2})(\.:|\.|:)/g, '<span class="verseNumber">$2</span>');
+        params.html = params.text.replace(/(.+)/g, '<div class="row">$1&nbsp;</div>')
+        .replace(/\[([a-zA-Z0-9_#+-/()]{2}\])(.{1,2})(\[[a-zA-Z0-9_#+-/()]+)\]/g,'[$1$3]$2')
+        .replace(/\[([a-zA-Z0-9_#+-/()]{3}\])(.{1,3})(\[[a-zA-Z0-9_#+-/()]+)\]/g,'[$1$3]$2')
+        .replace(/\[([a-zA-Z0-9_#+-/()]{4}\])(.{1,4})(\[[a-zA-Z0-9_#+-/()]+)\]/g,'[$1$3]$2')
+        .replace(/\[([a-zA-Z0-9_#+-/()]{5}\])(.{1,5})(\[[a-zA-Z0-9_#+-/()]+)\]/g,'[$1$3]$2')
+        .replace(/\[([a-zA-Z0-9_#+-/()\s]+)\]/g, '<span class="chord">$1</span>')
+        .replace(/<\/span>\s*<span class="chord">/g, " ")
+        .replace(/(?:\r\n|\r|\n)/g, '\n')
+        .replace(/(\.|=)(R[0-9]{0,2}|Ref|Rf|\*|[0-9]{1,2})(\.:|\.|:)/g, '<span class="verseNumber">$2</span>');
 
         params.html = '<meta name="viewport" content="width=device-width, initial-scale=1">'
             + styleHTML + (params.darkMode ? styleHTMLDark : '') + '<div class="container">' + params.html + '</div>';
