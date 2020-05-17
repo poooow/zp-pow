@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import Constants from 'expo-constants';
 
 const textColor = '#555555';
@@ -26,7 +26,7 @@ export default StyleSheet.create({
   },
   appState: {
     alignSelf: 'center',
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold'
   },
   loadDb: {
@@ -39,17 +39,6 @@ export default StyleSheet.create({
   subtitle: {
     fontSize: 15,
   },
-  input: {
-    fontSize: 17,
-    padding: 16,
-    marginLeft: 16,
-    marginVertical: 16,
-    height: 55,
-    borderColor: "#888888",
-    borderWidth: 1,
-    borderRadius: 10,
-    flexGrow: 1,
-  },
   icon: {
     justifyContent: "center",
     alignItems: "center",
@@ -59,13 +48,31 @@ export default StyleSheet.create({
   },
   iconDownload: {
     alignSelf: "center",
-    margin: 20,
+    width: 100,
+    height: 100,
+    marginTop: 40,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 9999,
+    backgroundColor: '#555',
   },
   songHeader: {
     flexDirection: 'row',
   },
   searchHeader: {
     flexDirection: 'row',
+  },
+  input: {
+    maxWidth: Dimensions.get('window').width -60,
+    fontSize: 17,
+    paddingHorizontal: 16,
+    marginLeft: 16,
+    marginVertical: 16,
+    height: 55,
+    borderColor: "#888888",
+    borderWidth: 1,
+    borderRadius: 10,
+    flexGrow: 1,
   },
   songHeaderTitle: {
     flexGrow: 1,

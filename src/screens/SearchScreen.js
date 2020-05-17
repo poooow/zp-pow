@@ -75,11 +75,10 @@ export default class SearchScreen extends React.Component {
     }
 
     populateDb = (data) => {
-        //let song = data.zpevnik_data.database[0].song;
         let song = data.InetSongDb.song;
 
         db.transaction(tx => {
-            for (i = 0; i < song.length; i++) {
+            for (let i = 0; i < song.length; i++) {
 
                 let groupname = song[i].groupname.toString().replace(/\"/g, '&quot;').replace(/\"/g, '&quot;');
                 let title = song[i].title.toString().replace(/\"/g, '&quot;');
@@ -112,7 +111,7 @@ export default class SearchScreen extends React.Component {
             tx.executeSql('SELECT groupname,title,text,snippet(zpevnikator, "<b>", "</b>","...", 4, 10) AS snippet FROM zpevnikator WHERE zpevnikator MATCH ? LIMIT 42',
                 [search],
                 (tx, results) => {
-                    for (i = 0; i < results.rows.length; ++i) {
+                    for (let i = 0; i < results.rows.length; ++i) {
                         songList.push({
                             id: i.toString(),
                             groupname: results.rows.item(i).groupname,
@@ -178,7 +177,7 @@ export default class SearchScreen extends React.Component {
     renderLoadDbButton = () => {
         return (
             <TouchableOpacity onPress={this.loadDb}>
-                <Icon style={[styles.iconDownload, { color: this.state.darkMode ? '#fff' : '#000' }]} name="download" size={100} />
+                <Icon style={[styles.iconDownload, { color: this.state.darkMode ? '#fff' : '#fff' }]} name="download" size={65} />
                 <Text style={[styles.loadDb, { color: this.state.darkMode ? '#fff' : '#000' }]}>Nahrát zpěvník z internetu (13 MB)</Text>
             </TouchableOpacity>
         );
@@ -228,7 +227,7 @@ export default class SearchScreen extends React.Component {
                             placeholder="Hledat autora, písničku, nebo část textu"
                             placeholderTextColor="#99999955"
                         />
-                        <Menu>
+                        <Menu style={styles.menu}>
                             <MenuTrigger>
                                 <Text
                                     style={[styles.menuTrigger, { color: this.state.darkMode ? '#666' : '#ccc' }]}>&#x22EE;</Text>
@@ -239,7 +238,6 @@ export default class SearchScreen extends React.Component {
                                 </MenuOption>
                             </MenuOptions>
                         </Menu>
-
                     </View>
 
                     {this.state.appState || !this.state.dbExists ?
