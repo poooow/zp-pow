@@ -5,6 +5,8 @@ import styles from '../../styles.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 import { MenuProvider, Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo'
 
 const XML_URL = 'https://kkns.eu/inet.xml';
 const db = SQLite.openDatabase('DbZpevnikator4');
@@ -26,13 +28,23 @@ export default class SearchScreen extends React.Component {
             dbExists: existsDb,
             songList: [],
             appState: appState,
-            darkMode: false
+            darkMode: false,
+            fontLoaded: false
         };
+
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (this.state.dbExists) this.updateSongList();
+        this._loadAssetsAsync();
     }
+
+    _loadAssetsAsync = async () => {
+        await Font.loadAsync({
+            RobotoSlab: require("../../assets/fonts/RobotoSlab-Medium.ttf"),
+        });
+        this.setState({ fontLoaded: true });
+    };
 
     existsDb = () => {
         db.transaction(tx => {
@@ -207,10 +219,15 @@ export default class SearchScreen extends React.Component {
 
     render() {
 
-        return (
-            <View style={[styles.container, { backgroundColor: this.state.darkMode ? '#000' : '#fff' }]}>
-                <MenuProvider>
-                    {/*<Button
+        if (!this.state.fontLoaded) {
+            return (
+                <AppLoading />
+            )
+        } else {
+            return (
+                <View style={[styles.container, { backgroundColor: this.state.darkMode ? '#000' : '#fff' }]}>
+                    <MenuProvider>
+                        {/*<Button
                         onPress={this.purgeDb}
                         title="Smazat databázi"
                         color="#841584"
@@ -220,52 +237,53 @@ export default class SearchScreen extends React.Component {
                     title="exists databázi"
                     color="#841584"
                 />*/}
-                    <View style={styles.searchHeader}>
-                        <TextInput
-                            style={[styles.input, { color: this.state.darkMode ? '#fff' : '#000' }]}
-                            onChangeText={text => this.updateSongList(text)}
-                            placeholder="Hledat autora, písničku, nebo část textu"
-                            placeholderTextColor="#99999955"
-                        />
-                        <Menu style={styles.menu}>
-                            <MenuTrigger>
-                                <Text
-                                    style={[styles.menuTrigger, { color: this.state.darkMode ? '#666' : '#ccc' }]}>&#x22EE;</Text>
-                            </MenuTrigger>
-                            <MenuOptions>
-                                <MenuOption onSelect={() => this.toggleDarkMode()}>
-                                    <Text style={styles.menuItem}>{this.state.darkMode ? 'Zrušit ' : ''}Noční režim</Text>
-                                </MenuOption>
-                            </MenuOptions>
-                        </Menu>
-                    </View>
-
-                    {this.state.appState || !this.state.dbExists ?
-                        <View style={styles.stateContainer}>
-                            {this.state.appState ? <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>{this.state.appState}</Text> : null}
-                            {this.state.dbExists ? null : this.renderLoadDbButton()}
-                        </View>
-                        : null}
-                    {this.state.dbExists ?
-                        <View>
-                            <FlatList
-                                keyboardShouldPersistTaps={'handled'}
-                                keyExtractor={(item) => item.id}
-                                data={this.state.songList}
-                                renderItem={this.renderItem}
+                        <View style={styles.searchHeader}>
+                            <TextInput
+                                style={[styles.input, { color: this.state.darkMode ? '#fff' : '#000' }]}
+                                onChangeText={text => this.updateSongList(text)}
+                                placeholder="Hledat autora, písničku, nebo část textu"
+                                placeholderTextColor="#99999955"
                             />
+                            <Menu style={styles.menu}>
+                                <MenuTrigger>
+                                    <Text
+                                        style={[styles.menuTrigger, { color: this.state.darkMode ? '#666' : '#ccc' }]}>&#x22EE;</Text>
+                                </MenuTrigger>
+                                <MenuOptions>
+                                    <MenuOption onSelect={() => this.toggleDarkMode()}>
+                                        <Text style={styles.menuItem}>{this.state.darkMode ? 'Zrušit ' : ''}Noční režim</Text>
+                                    </MenuOption>
+                                </MenuOptions>
+                            </Menu>
                         </View>
-                        : null}
-                    {this.state.appState == null && !this.state.songList.length ?
-                        <View style={styles.stateContainer}>
-                            <Icon style={[styles.iconSearch, { color: this.state.darkMode ? '#666' : '#ccc' }]} name="search" size={100} />
-                            <Text></Text>
-                            <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>Můžete začít hledat</Text>
-                        </View>
-                        : null}
-                </MenuProvider>
-            </View>
-        );
+
+                        {this.state.appState || !this.state.dbExists ?
+                            <View style={styles.stateContainer}>
+                                {this.state.appState ? <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>{this.state.appState}</Text> : null}
+                                {this.state.dbExists ? null : this.renderLoadDbButton()}
+                            </View>
+                            : null}
+                        {this.state.dbExists ?
+                            <View>
+                                <FlatList
+                                    keyboardShouldPersistTaps={'handled'}
+                                    keyExtractor={(item) => item.id}
+                                    data={this.state.songList}
+                                    renderItem={this.renderItem}
+                                />
+                            </View>
+                            : null}
+                        {this.state.appState == null && !this.state.songList.length ?
+                            <View style={styles.stateContainer}>
+                                <Icon style={[styles.iconSearch, { color: this.state.darkMode ? '#666' : '#ccc' }]} name="search" size={100} />
+                                <Text></Text>
+                                <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>Můžete začít hledat</Text>
+                            </View>
+                            : null}
+                    </MenuProvider>
+                </View>
+            );
+        }
     }
 }
 

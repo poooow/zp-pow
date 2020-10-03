@@ -25,9 +25,9 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   appState: {
+    fontFamily: 'RobotoSlab',
     alignSelf: 'center',
     fontSize: 28,
-    fontWeight: 'bold'
   },
   loadDb: {
     alignSelf: 'center',
