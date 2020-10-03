@@ -6,7 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 import { MenuProvider, Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import * as Font from 'expo-font';
-import { AppLoading } from 'expo'
+import { AppLoading } from 'expo';
+import SvgUri from "expo-svg-uri";
 
 const XML_URL = 'https://kkns.eu/inet.xml';
 const db = SQLite.openDatabase('DbZpevnikator4');
@@ -275,7 +276,8 @@ export default class SearchScreen extends React.Component {
                             : null}
                         {this.state.appState == null && !this.state.songList.length ?
                             <View style={styles.stateContainer}>
-                                <Icon style={[styles.iconSearch, { color: this.state.darkMode ? '#666' : '#ccc' }]} name="search" size={100} />
+
+                                <SvgUri width="100" height="100" source={require("../../assets/images/icon_arrow_up.svg")} />
                                 <Text></Text>
                                 <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>Můžete začít hledat</Text>
                             </View>
