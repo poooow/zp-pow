@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, FlatList, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { Button, FlatList, Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import styles from '../../styles.js';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 import { MenuProvider, Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import * as Font from 'expo-font';
