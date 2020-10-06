@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FlatList, Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Button, FlatList, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import styles from '../../styles.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -190,8 +190,8 @@ export default class SearchScreen extends React.Component {
     renderLoadDbButton = () => {
         return (
             <TouchableOpacity onPress={this.loadDb}>
-                <Icon style={[styles.iconDownload, { color: this.state.darkMode ? '#fff' : '#fff' }]} name="download" size={65} />
-                <Text style={[styles.loadDb, { color: this.state.darkMode ? '#fff' : '#000' }]}>Nahrát zpěvník z internetu (13 MB)</Text>
+                <SvgUri style={styles.iconDownload} width="150" height="150" source={require("../../assets/images/icon_download.svg")} />
+                <Text style={[styles.loadDb, { color: this.state.darkMode ? '#fff' : '#000' }]}>Nahrát zpěvník{"\n"} z internetu (13 MB)</Text>
             </TouchableOpacity>
         );
     }
@@ -228,7 +228,7 @@ export default class SearchScreen extends React.Component {
             return (
                 <View style={[styles.container, { backgroundColor: this.state.darkMode ? '#000' : '#fff' }]}>
                     <MenuProvider>
-                        {/*<Button
+                     {/*<Button
                         onPress={this.purgeDb}
                         title="Smazat databázi"
                         color="#841584"
@@ -240,7 +240,7 @@ export default class SearchScreen extends React.Component {
                 />*/}
                         <View style={styles.searchHeader}>
                             <TextInput
-                                style={[styles.input, { color: this.state.darkMode ? '#fff' : '#000' }]}
+                                style={styles.input}
                                 onChangeText={text => this.updateSongList(text)}
                                 placeholder="Hledat autora, písničku, nebo část textu"
                                 placeholderTextColor="#99999955"
@@ -276,11 +276,13 @@ export default class SearchScreen extends React.Component {
                             : null}
                         {this.state.appState == null && !this.state.songList.length ?
                             <View style={styles.stateContainer}>
-
                                 <SvgUri width="100" height="100" source={require("../../assets/images/icon_arrow_up.svg")} />
                                 <Text></Text>
-                                <Text style={[styles.appState, { color: this.state.darkMode ? '#666' : '#ccc' }]}>Můžete začít hledat</Text>
+                                <Text style={styles.appState}>Můžete začít hledat</Text>
                             </View>
+                            : null}
+                        {this.state.appState == null && !this.state.songList.length ?
+                            <View style={styles.imageGiraffe}><SvgUri width="250" height="250" source={require("../../assets/images/giraffe.svg")} /></View>
                             : null}
                     </MenuProvider>
                 </View>

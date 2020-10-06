@@ -16,28 +16,34 @@ export default StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    borderBottomColor: "gray",
+    borderBottomColor: "#aaaaaa44",
     borderBottomWidth: 1,
   },
   stateContainer: {
+    marginTop: 40,
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   appState: {
     fontFamily: 'RobotoSlab',
     alignSelf: 'center',
     fontSize: 28,
+    color: '#ccc'
   },
   loadDb: {
     alignSelf: 'center',
-    fontSize: 17,
+    fontSize: 28,
+    fontFamily: 'RobotoSlab',
+    textAlign: 'center',
   },
   title: {
     fontSize: 17,
+    fontFamily: 'RobotoSlab',
   },
   subtitle: {
     fontSize: 15,
+    fontFamily: 'RobotoSlab',
   },
   icon: {
     justifyContent: "center",
@@ -48,13 +54,8 @@ export default StyleSheet.create({
   },
   iconDownload: {
     alignSelf: "center",
-    width: 100,
-    height: 100,
     marginTop: 40,
-    marginBottom: 20,
     padding: 20,
-    borderRadius: 9999,
-    backgroundColor: '#555',
   },
   songHeader: {
     flexDirection: 'row',
@@ -64,15 +65,15 @@ export default StyleSheet.create({
   },
   input: {
     maxWidth: Dimensions.get('window').width -60,
-    fontSize: 17,
-    paddingHorizontal: 16,
+    fontSize: 16,
+    fontFamily: 'RobotoSlab',
+    paddingHorizontal: 20,
     marginLeft: 16,
     marginVertical: 16,
     height: 55,
-    borderColor: "#888888",
-    borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 27.5,
     flexGrow: 1,
+    backgroundColor: '#f5f5f5',
   },
   songHeaderTitle: {
     flexGrow: 1,
@@ -94,5 +95,9 @@ export default StyleSheet.create({
     paddingBottom: 5,
     fontSize: 15,
     color: textColor,
+  },
+  imageGiraffe: {
+    position: 'absolute',
+    marginTop: Dimensions.get('window').height - 250 - Constants.statusBarHeight,
   },
 });
