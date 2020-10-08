@@ -8,7 +8,7 @@ import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import SvgUri from "expo-svg-uri";
 
-const XML_URL = 'https://kkns.eu/inet.xml';
+const XML_URL = 'https://raw.githubusercontent.com/poooow/zp-pow/master/inet.xml';
 const db = SQLite.openDatabase('DbZpevnikator4');
 const parseString = require('react-native-xml2js').parseString;
 
