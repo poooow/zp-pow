@@ -7,6 +7,7 @@ import { MenuProvider, Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import SvgUri from "expo-svg-uri";
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
 const XML_URL = 'https://raw.githubusercontent.com/poooow/zp-pow/master/inet.xml';
 const db = SQLite.openDatabase('DbZpevnikator4');
@@ -29,7 +30,8 @@ export default class SearchScreen extends React.Component {
             songList: [],
             appState: appState,
             darkMode: false,
-            fontLoaded: false
+            fontLoaded: false,
+            keepAwake: false
         };
     }
 
@@ -175,13 +177,22 @@ export default class SearchScreen extends React.Component {
 
         this.updateSongList();
     }
-
+    
     toggleDarkMode = () => {
 
         let newState = !this.state.darkMode;
 
         this.setState({
             darkMode: newState,
+        });
+    };
+
+    toggleAwake = () => {
+        if (this.state.keepAwake) deactivateKeepAwake();
+        else activateKeepAwake();
+
+        this.setState({
+            keepAwake: !this.state.keepAwake
         });
     };
 
@@ -226,7 +237,7 @@ export default class SearchScreen extends React.Component {
             return (
                 <View style={[styles.container, { backgroundColor: this.state.darkMode ? '#000' : '#fff' }]}>
                     <MenuProvider>
-                     {/*<Button
+                        {/*<Button
                         onPress={this.purgeDb}
                         title="Smazat databázi"
                         color="#841584"
@@ -251,6 +262,9 @@ export default class SearchScreen extends React.Component {
                                 <MenuOptions>
                                     <MenuOption onSelect={() => this.toggleDarkMode()}>
                                         <Text style={styles.menuItem}>{this.state.darkMode ? 'Zrušit ' : ''}Noční režim</Text>
+                                    </MenuOption>
+                                    <MenuOption onSelect={() => this.toggleAwake()}>
+                                        <Text style={styles.menuItem}>{this.state.keepAwake ? 'Zhasínat ' : 'Nezhasínat '}displej</Text>
                                     </MenuOption>
                                 </MenuOptions>
                             </Menu>
