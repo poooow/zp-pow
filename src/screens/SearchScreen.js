@@ -31,7 +31,6 @@ export default class SearchScreen extends React.Component {
             darkMode: false,
             fontLoaded: false
         };
-
     }
 
     async componentDidMount() {

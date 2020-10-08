@@ -64,7 +64,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
-    maxWidth: Dimensions.get('window').width -60,
+    maxWidth: Dimensions.get('window').width - 60,
     fontSize: 16,
     fontFamily: 'RobotoSlab',
     paddingHorizontal: 20,
@@ -78,6 +78,7 @@ export default StyleSheet.create({
   songHeaderTitle: {
     flexGrow: 1,
     paddingTop: 15,
+    width: Dimensions.get('window').width - 170,
   },
   songScrollView: {
     marginHorizontal: 10,
@@ -100,4 +101,17 @@ export default StyleSheet.create({
     position: 'absolute',
     marginTop: Dimensions.get('window').height - 250 - Constants.statusBarHeight,
   },
+  songHeaderTransposition: {
+    paddingTop: 20,
+    flexDirection: 'row',
+    width: 100,
+  },
+  iconBack: {
+    paddingTop: 10,
+  },
+  shift: {
+    fontSize: 9,
+    fontFamily: 'RobotoSlab',
+    color: "#aaaaaa"
+  }
 });
