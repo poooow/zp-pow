@@ -27,8 +27,12 @@
     },
     "android": {
       "package": "com.pow.zppow",
-      "versionCode": 2,
-      "permissions": []
+      "versionCode": 3,
+      "permissions": [],
+      "adaptiveIcon": { 
+        "foregroundImage": "./assets/icon-adaptive.png",
+        "backgroundColor": "#c1272d"
+      }
     }
   }
 }
