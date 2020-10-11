@@ -29,6 +29,8 @@ export default class SongScreen extends React.Component {
 
         const chords = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'BB', 'H'];
 
+        if (!chords.includes(chord)) return chord; // Exclude unlisted chords
+
         let isLowerCase = (chord.toLowerCase() === chord); //If chord on input is lowercase, output has to be lowercase too
         if (shift < 0) {
             shift = (chords.length + shift) % chords.length;
