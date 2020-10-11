@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View, ScrollView, StyleSheet, Image } from 'react-native';
 import styles from '../../styles.js';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { WebView } from 'react-native-webview';
 import SvgUri from "expo-svg-uri";
 
