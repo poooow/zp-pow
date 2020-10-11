@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/helper-validator-identifier": "^7.9.5",
     "@react-native-community/masked-view": "0.1.10",
-    "expo": "^39.0.0",
+    "expo": "^39.0.3",
     "expo-font": "~8.3.0",
     "expo-keep-awake": "~8.3.0",
     "expo-sqlite": "~8.4.0",
