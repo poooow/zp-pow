@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import styles from '../../styles.js';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { WebView } from 'react-native-webview';
