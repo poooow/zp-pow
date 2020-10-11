@@ -83,7 +83,6 @@ export default class SongScreen extends React.Component {
         let params = this.state.params;
 
         const styleHTML = `<style type="text/css">
-        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
         html, body {
             padding: 0;
             margin: 0;
@@ -94,11 +93,12 @@ export default class SongScreen extends React.Component {
         }
 
         .container {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 90%;
+            font-family:  monospace;
+            font-size: 100%;
             line-height: 2.5em;
             padding: 1rem;
             flex-grow: 1;
+            font-weight: 700;
         }
 
         .row {
