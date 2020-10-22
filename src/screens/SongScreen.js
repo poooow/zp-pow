@@ -4,6 +4,7 @@ import styles from '../../styles.js';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { WebView } from 'react-native-webview';
 import SvgUri from "expo-svg-uri";
+import transpose from '../helpers/transpose';
 
 export default class SongScreen extends React.Component {
 
@@ -14,40 +15,10 @@ export default class SongScreen extends React.Component {
             transposition: 0,
             params: this.props.navigation.state.params
         };
-
-        this.makeHTML();
     }
 
-    /**
-    * Transpose chord base tone by given shift
-    * @param  chord
-    * @param  shift
-    * @returns {string}
-    */
-    transpose(chord, shift) {
-
-        const chords = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'BB', 'H'];
-
-        let isLowerCase = (chord.toLowerCase() === chord); //If chord on input is lowercase, output has to be lowercase too
-        if (shift < 0) {
-            shift = (chords.length + shift) % chords.length;
-        }
-        let parts = chord.match(/^(.[#b]?)(.*)$/, chord);
-        let base = parts[1]; //For C#maj7 it is "C#"
-        let rest = parts[2]; //For C#maj7 it is "maj7"
-        let index = chords.indexOf(base.toUpperCase());
-
-        if (index == -1) return chord; // Retrun if chord is not listed
-
-        let newBase = chords[(index + shift) % chords.length]; //shifted base tone
-
-        if (isLowerCase) {
-            newBase = newBase.toLowerCase();
-        } else if (newBase === 'BB') {
-            newBase = 'Bb'; //this is special case, second 'b' has to be lowercase to make sense
-        }
-
-        return newBase + rest;
+    async componentDidMount() {
+        this.makeHTML();
     }
 
     transposeUp = () => {
@@ -74,7 +45,7 @@ export default class SongScreen extends React.Component {
      * @returns {string}
      */
     transposeHTML = (_, chord) => {
-        return '<span class="chord">' + this.transpose(chord, this.state.transposition) + '</span>';
+        return '<span class="chord">' + transpose(chord, this.state.transposition) + '</span>';
     }
 
      /** 
